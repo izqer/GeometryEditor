@@ -1,21 +1,220 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+﻿
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:GeometryEditor.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:picker="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.ColorPicker"
         x:Class="GeometryEditor.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="GeometryEditor">
+        RequestedThemeVariant="Light"
+        Title="Редактор геометрических фигур"
+        Width="1200" Height="750"
+        MinWidth="900" MinHeight="600"
+        Background="#EEF1F5">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainViewModel />
-    </Design.DataContext>
+    <!--Сетка приложения-->
+    <Grid ColumnDefinitions="250,*"
+          RowDefinitions="*,36">
 
-    <TextBox Text="{Binding _greeting, Mode=TwoWay}"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center" />
+        <!--Левая панель элементов-->
+        <Border Grid.Column="0"
+                Grid.RowSpan="2"
+                Background="#F8FAFC"
+                BorderBrush="#D5DBE3"
+                BorderThickness="0,0,1,0">
+
+            <Grid Margin="12"
+                  RowDefinitions="Auto,Auto,*,Auto"
+                  RowSpacing="12">
+
+                <!-- Контейнер фигур -->
+                <Border Grid.Row="0"
+                        Background="White"
+                        BorderBrush="#D5DBE3"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Фигуры"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#253347"
+                                   Margin="0,0,0,4"/>
+                        <!-- Список фигур -->
+                        <Button Content="Квадрат"
+                                HorizontalAlignment="Stretch"/>
+
+                        <Button Content="Треугольник"
+                                HorizontalAlignment="Stretch"/>
+
+                        <Button Content="Круг"
+                                HorizontalAlignment="Stretch"/>
+
+                        <Button Content="Прямоугольник"
+                                HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Контейнер свойств -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderBrush="#D5DBE3"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+
+                    <StackPanel Spacing="10">
+
+                        <TextBlock Text="Свойства"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#253347"/>
+
+                        <Grid ColumnDefinitions="65,*"
+                              RowDefinitions="Auto,Auto,Auto,Auto"
+                              RowSpacing="8"
+                              ColumnSpacing="5">
+                            <!-- Тестовые свойства -->
+                            <TextBlock Grid.Row="0"
+                                       Text="X:"
+                                       VerticalAlignment="Center"/>
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="1"
+                                     Text="100"/>
+
+                            <TextBlock Grid.Row="1"
+                                       Text="Y:"
+                                       VerticalAlignment="Center"/>
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="1"
+                                     Text="100"/>
+
+                            <TextBlock Grid.Row="2"
+                                       Text="Радиус:"
+                                       VerticalAlignment="Center"/>
+                            <TextBox Grid.Row="2"
+                                     Grid.Column="1"
+                                     Text="50"/>
+
+                            <!-- Палитра -->
+                            <TextBlock Grid.Row="3"
+                                       Text="Цвет:"
+                                       VerticalAlignment="Center"/>
+                            <picker:ColorPicker x:Name="FigureColorPicker"
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        Color="#FF0000"
+                                        IsAlphaEnabled="False"
+                                        HorizontalAlignment="Stretch"/>
+
+
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Контейнер созданных фигур -->
+                <Border Grid.Row="2"
+                        Background="White"
+                        BorderBrush="#D5DBE3"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+
+                    <Grid RowDefinitions="Auto,*"
+                          RowSpacing="10">
+
+                        <TextBlock Text="Созданные фигуры"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#253347"/>
+
+                        <ListBox Grid.Row="1"
+                                 Background="White"
+                                 BorderThickness="0">
+
+                            <!-- Тестовый лист -->
+                            <ListBoxItem Content="Круг 1"/>
+                            <ListBoxItem Content="Квадрат 1"/>
+                            <ListBoxItem Content="Прямоугольник 1"/>
+                            <ListBoxItem Content="Треугольник 1"/>
+
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <!-- Кнопка Создать/Удалить -->
+                <Button Grid.Row="3"
+                        Content="Создать"
+                        Height="45"
+                        FontSize="16"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Stretch"
+                        Background="#2563EB"
+                        Foreground="White"/>
+            </Grid>
+        </Border>
+
+        <!-- Рабочая зона -->
+        <Border Grid.Column="1"
+                Grid.Row="0"
+                Margin="12,12,12,8"
+                Background="White"
+                CornerRadius="6"
+                ClipToBounds="True">
+
+            <Canvas Background="Transparent">
+
+                <!-- Тестовые фигуры -->
+                <Ellipse Width="180"
+                         Height="180"
+                         Fill="Red"
+                         Stroke="Black"
+                         StrokeThickness="2"
+                         Canvas.Left="55"
+                         Canvas.Top="45"/>
+
+                <Rectangle Width="130"
+                           Height="130"
+                           Fill="Green"
+                           Stroke="Black"
+                           StrokeThickness="2"
+                           Canvas.Left="335"
+                           Canvas.Top="45"/>
+
+                <Polygon Points="0,170 90,0 180,170"
+                         Fill="Blue"
+                         Stroke="Black"
+                         StrokeThickness="2"
+                         Canvas.Left="490"
+                         Canvas.Top="185"/>
+
+                <Rectangle Width="310"
+                           Height="145"
+                           Fill="Yellow"
+                           Stroke="Black"
+                           StrokeThickness="2"
+                           Canvas.Left="60"
+                           Canvas.Top="335"/>
+
+            </Canvas>
+        </Border>
+
+        <!-- Строка сообщений -->
+        <Border Grid.Column="1"
+                Grid.Row="1"
+                Margin="12,0,12,8"
+                Background="White"
+                CornerRadius="4"
+                Padding="8,4">
+
+            <TextBlock Text="Готов к работе"
+                       FontSize="12"
+                       Foreground="#526173"
+                       VerticalAlignment="Center"/>
+        </Border>
+
+    </Grid>
 </Window>
+

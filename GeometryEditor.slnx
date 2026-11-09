@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="GeometryEditor/GeometryEditor.csproj" />
+  <Project Path="GeometryEditor.Core/GeometryEditor.Core.csproj" />
+  <Project Path="GeometryEditor.Wpf/GeometryEditor.Wpf.csproj" />
+  <Project Path="GeometryEditor/GeometryEditor.Avalonia.csproj" />
 </Solution>
