@@ -107,20 +107,29 @@
 
                         <!-- Список фигур -->
                         <Button Content="Квадрат"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,0,8"/>
+                        Command="{Binding SelectFigureTypeCommand}"
+                        CommandParameter="Квадрат"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,0,8"/>
 
                         <Button Content="Треугольник"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,0,8"/>
+                        Command="{Binding SelectFigureTypeCommand}"
+                        CommandParameter="Треугольник"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,0,8"/>
 
                         <Button Content="Круг"
-                                HorizontalAlignment="Stretch"
-                                Margin="0,0,0,8"/>
+                        Command="{Binding SelectFigureTypeCommand}"
+                        CommandParameter="Круг"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,0,8"/>
 
                         <Button Content="Прямоугольник"
-                                HorizontalAlignment="Stretch"/>
+                        Command="{Binding SelectFigureTypeCommand}"
+                        CommandParameter="Прямоугольник"
+                        HorizontalAlignment="Stretch"/>
                     </StackPanel>
+                    
                 </Border>
 
                 <!-- Контейнер свойств -->
@@ -139,6 +148,7 @@
                                    Foreground="#253347"
                                    Margin="0,0,0,10"/>
 
+                        <!-- Поля свойств фигуры -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="65"/>
@@ -150,41 +160,141 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Тестовые свойства -->
+                            <!-- Координаты X и Y -->
                             <TextBlock Grid.Row="0"
-                                       Text="X:"
-                                       VerticalAlignment="Center"/>
+               Text="X:"
+               VerticalAlignment="Center"/>
                             <TextBox Grid.Row="0"
-                                     Grid.Column="1"
-                                     Margin="5,0,0,8"
-                                     Text="100"/>
+             Grid.Column="1"
+             Margin="5,0,0,8"
+             Text="{Binding X, UpdateSourceTrigger=LostFocus}"/>
 
                             <TextBlock Grid.Row="1"
-                                       Text="Y:"
-                                       VerticalAlignment="Center"/>
+               Text="Y:"
+               VerticalAlignment="Center"/>
                             <TextBox Grid.Row="1"
-                                     Grid.Column="1"
-                                     Margin="5,0,0,8"
-                                     Text="100"/>
+             Grid.Column="1"
+             Margin="5,0,0,8"
+             Text="{Binding Y, UpdateSourceTrigger=LostFocus}"/>
 
-                            <TextBlock Grid.Row="2"
-                                       Text="Радиус:"
-                                       VerticalAlignment="Center"/>
-                            <TextBox Grid.Row="2"
-                                     Grid.Column="1"
-                                     Margin="5,0,0,8"
-                                     Text="50"/>
+                            <!-- Радиус круга -->
+                            <StackPanel Grid.Row="2" Grid.ColumnSpan="2"
+                Margin="0,0,0,8">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedFigureType}"
+                                 Value="Круг">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
 
-                            <TextBlock Grid.Row="3"
-                                       Text="Цвет:"
-                                       VerticalAlignment="Center"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="65"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Радиус:"
+                       VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1"
+                     Margin="5,0,0,0"
+                     Text="{Binding Radius, UpdateSourceTrigger=LostFocus}"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Сторона квадрата -->
+                            <StackPanel Grid.Row="3" Grid.ColumnSpan="2"
+                Margin="0,0,0,8">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedFigureType}"
+                                 Value="Квадрат">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="65"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Сторона:"
+                       VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1"
+                     Margin="5,0,0,0"
+                     Text="{Binding Side, UpdateSourceTrigger=LostFocus}"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Ширина и высота -->
+                            <StackPanel Grid.Row="4" Grid.ColumnSpan="2"
+                Margin="0,0,0,8">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedFigureType}"
+                                 Value="Прямоугольник">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding SelectedFigureType}"
+                                 Value="Треугольник">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="65"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0"
+                       Text="Ширина:"
+                       VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="0"
+                     Grid.Column="1"
+                     Margin="5,0,0,8"
+                     Text="{Binding Width, UpdateSourceTrigger=LostFocus}"/>
+
+                                    <TextBlock Grid.Row="1"
+                       Text="Высота:"
+                       VerticalAlignment="Center"/>
+                                    <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Margin="5,0,0,0"
+                     Text="{Binding Height, UpdateSourceTrigger=LostFocus}"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Цвет фигуры -->
+                            <TextBlock Grid.Row="5"
+               Text="Цвет:"
+               VerticalAlignment="Center"/>
 
                             <!-- Палитра -->
-                            <Grid Grid.Row="3"
-                                  Grid.Column="1"
-                                  Margin="5,0,0,0">
+                            <Grid Grid.Row="5"
+          Grid.Column="1"
+          Margin="5,0,0,0">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -192,17 +302,16 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBox x:Name="ColorTextBox"
-                                         Grid.Column="0"
-                                         Text="#FF0000"
-                                         IsReadOnly="True"
-                                         Margin="0,0,5,0"/>
+                 Grid.Column="0"
+                 Text="#FF0000"
+                 IsReadOnly="True"
+                 Margin="0,0,5,0"/>
 
                                 <Button x:Name="ColorButton"
-                                        Grid.Column="1"
-                                        Content="..."
-                                        Background="#FF0000"
-                                        Click="ChooseColor_Click"/>
-
+                Grid.Column="1"
+                Content="..."
+                Background="#FF0000"
+                Click="ChooseColor_Click"/>
                             </Grid>
                         </Grid>
                     </StackPanel>
@@ -229,23 +338,20 @@
                                    Foreground="#253347"
                                    Margin="0,0,0,10"/>
 
-                        <ListBox Grid.Row="1"
+                        <ListBox ItemsSource="{Binding Figures}"
+                                 SelectedItem="{Binding SelectedFigure, Mode=TwoWay}"
+                                 DisplayMemberPath="DisplayName"
                                  Background="White"
                                  Foreground="#253347"
                                  BorderThickness="0">
-
-                            <!-- Тестовый лист -->
-                            <ListBoxItem Content="Круг 1"/>
-                            <ListBoxItem Content="Квадрат 1"/>
-                            <ListBoxItem Content="Прямоугольник 1"/>
-                            <ListBoxItem Content="Треугольник 1"/>
                         </ListBox>
                     </Grid>
                 </Border>
 
                 <!-- Кнопка Создать/Удалить -->
                 <Button Grid.Row="3"
-                        Content="Создать"
+                        Content="{Binding ActionButtonText}"
+                        Command="{Binding ApplyCommand}"
                         Height="45"
                         FontSize="16"
                         HorizontalContentAlignment="Center"
@@ -265,39 +371,13 @@
                 CornerRadius="6"
                 ClipToBounds="True">
 
-            <Canvas Background="Transparent">
+            <Canvas x:Name="WorkCanvas"
+                    Background="Transparent"
+                    MouseLeftButtonDown="WorkCanvas_MouseLeftButtonDown"
+                    MouseMove="WorkCanvas_MouseMove"
+                    MouseLeftButtonUp="WorkCanvas_MouseLeftButtonUp">
 
                 <!-- Тестовые фигуры -->
-                <Ellipse Width="99"
-                         Height="99"
-                         Fill="Red"
-                         Stroke="Black"
-                         StrokeThickness="2"
-                         Canvas.Left="558"
-                         Canvas.Top="300"/>
-
-                <Rectangle Width="70"
-                           Height="70"
-                           Fill="Green"
-                           Stroke="Black"
-                           StrokeThickness="2"
-                           Canvas.Left="252"
-                           Canvas.Top="197"/>
-
-                <Polygon Points="0,120 90,0 180,120"
-                         Fill="Blue"
-                         Stroke="Black"
-                         StrokeThickness="2"
-                         Canvas.Left="186"
-                         Canvas.Top="388"/>
-
-                <Rectangle Width="120"
-                           Height="329"
-                           Fill="Yellow"
-                           Stroke="Black"
-                           StrokeThickness="2"
-                           Canvas.Left="422"
-                           Canvas.Top="102" RenderTransformOrigin="0.29,0.876" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Canvas>
         </Border>
 
@@ -309,7 +389,7 @@
                 CornerRadius="4"
                 Padding="8,4">
 
-            <TextBlock Text="Готов к работе"
+            <TextBlock Text="{Binding StatusMessage}"
                        FontSize="12"
                        Foreground="#526173"
                        VerticalAlignment="Center"/>
