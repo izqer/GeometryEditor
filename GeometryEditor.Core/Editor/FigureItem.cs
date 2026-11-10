@@ -1,6 +1,6 @@
-﻿using GeometryEditor.Core.Models;
+using GeometryEditor.Core.Models;
 
-namespace GeometryEditor.Wpf.ViewModels
+namespace GeometryEditor.Core.Editor
 {
     // Элемент списка созданных фигур
     public class FigureItem

@@ -1,7 +1,7 @@
-﻿
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:GeometryEditor.ViewModels"
+        xmlns:editor="using:GeometryEditor.Core.Editor"
         xmlns:picker="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.ColorPicker"
         x:Class="GeometryEditor.Views.MainWindow"
         x:DataType="vm:MainViewModel"
@@ -40,17 +40,26 @@
                                    FontWeight="SemiBold"
                                    Foreground="#253347"
                                    Margin="0,0,0,4"/>
+
                         <!-- Список фигур -->
                         <Button Content="Квадрат"
+                                Command="{Binding SelectFigureTypeCommand}"
+                                CommandParameter="Квадрат"
                                 HorizontalAlignment="Stretch"/>
 
                         <Button Content="Треугольник"
+                                Command="{Binding SelectFigureTypeCommand}"
+                                CommandParameter="Треугольник"
                                 HorizontalAlignment="Stretch"/>
 
                         <Button Content="Круг"
+                                Command="{Binding SelectFigureTypeCommand}"
+                                CommandParameter="Круг"
                                 HorizontalAlignment="Stretch"/>
 
                         <Button Content="Прямоугольник"
+                                Command="{Binding SelectFigureTypeCommand}"
+                                CommandParameter="Прямоугольник"
                                 HorizontalAlignment="Stretch"/>
                     </StackPanel>
                 </Border>
@@ -64,50 +73,87 @@
                         Padding="12">
 
                     <StackPanel Spacing="10">
-
                         <TextBlock Text="Свойства"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#253347"/>
 
                         <Grid ColumnDefinitions="65,*"
-                              RowDefinitions="Auto,Auto,Auto,Auto"
+                              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
                               RowSpacing="8"
                               ColumnSpacing="5">
-                            <!-- Тестовые свойства -->
+
+                            <!-- Координаты X и Y -->
                             <TextBlock Grid.Row="0"
                                        Text="X:"
                                        VerticalAlignment="Center"/>
                             <TextBox Grid.Row="0"
                                      Grid.Column="1"
-                                     Text="100"/>
+                                     Text="{Binding XText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
 
                             <TextBlock Grid.Row="1"
                                        Text="Y:"
                                        VerticalAlignment="Center"/>
                             <TextBox Grid.Row="1"
                                      Grid.Column="1"
-                                     Text="100"/>
+                                     Text="{Binding YText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
 
-                            <TextBlock Grid.Row="2"
-                                       Text="Радиус:"
-                                       VerticalAlignment="Center"/>
-                            <TextBox Grid.Row="2"
-                                     Grid.Column="1"
-                                     Text="50"/>
+                            <!-- Радиус круга -->
+                            <Grid Grid.Row="2"
+                                  Grid.ColumnSpan="2"
+                                  ColumnDefinitions="65,*"
+                                  ColumnSpacing="5"
+                                  IsVisible="{Binding IsCircle}">
+                                <TextBlock Text="Радиус:"
+                                           VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding RadiusText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                            </Grid>
+
+                            <!-- Сторона квадрата -->
+                            <Grid Grid.Row="3"
+                                  Grid.ColumnSpan="2"
+                                  ColumnDefinitions="65,*"
+                                  ColumnSpacing="5"
+                                  IsVisible="{Binding IsSquare}">
+                                <TextBlock Text="Сторона:"
+                                           VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding SideText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                            </Grid>
+
+                            <!-- Ширина и высота -->
+                            <Grid Grid.Row="4"
+                                  Grid.ColumnSpan="2"
+                                  ColumnDefinitions="65,*"
+                                  RowDefinitions="Auto,Auto"
+                                  RowSpacing="8"
+                                  ColumnSpacing="5"
+                                  IsVisible="{Binding HasWidthHeight}">
+                                <TextBlock Grid.Row="0"
+                                           Text="Ширина:"
+                                           VerticalAlignment="Center"/>
+                                <TextBox Grid.Row="0"
+                                         Grid.Column="1"
+                                         Text="{Binding WidthText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                <TextBlock Grid.Row="1"
+                                           Text="Высота:"
+                                           VerticalAlignment="Center"/>
+                                <TextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Text="{Binding HeightText, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                            </Grid>
 
                             <!-- Палитра -->
-                            <TextBlock Grid.Row="3"
+                            <TextBlock Grid.Row="5"
                                        Text="Цвет:"
                                        VerticalAlignment="Center"/>
                             <picker:ColorPicker x:Name="FigureColorPicker"
-                                        Grid.Row="3"
-                                        Grid.Column="1"
-                                        Color="#FF0000"
-                                        IsAlphaEnabled="False"
-                                        HorizontalAlignment="Stretch"/>
-
-
+                                                Grid.Row="5"
+                                                Grid.Column="1"
+                                                Color="#FF0000"
+                                                IsAlphaEnabled="False"
+                                                HorizontalAlignment="Stretch"/>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -122,29 +168,29 @@
 
                     <Grid RowDefinitions="Auto,*"
                           RowSpacing="10">
-
                         <TextBlock Text="Созданные фигуры"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#253347"/>
 
                         <ListBox Grid.Row="1"
+                                 ItemsSource="{Binding Figures}"
+                                 SelectedItem="{Binding SelectedFigure, Mode=TwoWay}"
                                  Background="White"
                                  BorderThickness="0">
-
-                            <!-- Тестовый лист -->
-                            <ListBoxItem Content="Круг 1"/>
-                            <ListBoxItem Content="Квадрат 1"/>
-                            <ListBoxItem Content="Прямоугольник 1"/>
-                            <ListBoxItem Content="Треугольник 1"/>
-
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="editor:FigureItem">
+                                    <TextBlock Text="{Binding DisplayName}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
                         </ListBox>
                     </Grid>
                 </Border>
 
                 <!-- Кнопка Создать/Удалить -->
                 <Button Grid.Row="3"
-                        Content="Создать"
+                        Content="{Binding ActionButtonText}"
+                        Command="{Binding ApplyCommand}"
                         Height="45"
                         FontSize="16"
                         HorizontalContentAlignment="Center"
@@ -164,40 +210,14 @@
                 CornerRadius="6"
                 ClipToBounds="True">
 
-            <Canvas Background="Transparent">
+            <Canvas x:Name="WorkCanvas"
+                    Background="Transparent"
+                    PointerPressed="WorkCanvas_PointerPressed"
+                    PointerMoved="WorkCanvas_PointerMoved"
+                    PointerReleased="WorkCanvas_PointerReleased"
+                    PointerCaptureLost="WorkCanvas_PointerCaptureLost">
 
-                <!-- Тестовые фигуры -->
-                <Ellipse Width="180"
-                         Height="180"
-                         Fill="Red"
-                         Stroke="Black"
-                         StrokeThickness="2"
-                         Canvas.Left="55"
-                         Canvas.Top="45"/>
-
-                <Rectangle Width="130"
-                           Height="130"
-                           Fill="Green"
-                           Stroke="Black"
-                           StrokeThickness="2"
-                           Canvas.Left="335"
-                           Canvas.Top="45"/>
-
-                <Polygon Points="0,170 90,0 180,170"
-                         Fill="Blue"
-                         Stroke="Black"
-                         StrokeThickness="2"
-                         Canvas.Left="490"
-                         Canvas.Top="185"/>
-
-                <Rectangle Width="310"
-                           Height="145"
-                           Fill="Yellow"
-                           Stroke="Black"
-                           StrokeThickness="2"
-                           Canvas.Left="60"
-                           Canvas.Top="335"/>
-
+                <!-- Фигуры создаются программно -->
             </Canvas>
         </Border>
 
@@ -209,7 +229,7 @@
                 CornerRadius="4"
                 Padding="8,4">
 
-            <TextBlock Text="Готов к работе"
+            <TextBlock Text="{Binding StatusMessage}"
                        FontSize="12"
                        Foreground="#526173"
                        VerticalAlignment="Center"/>
@@ -217,4 +237,3 @@
 
     </Grid>
 </Window>
-

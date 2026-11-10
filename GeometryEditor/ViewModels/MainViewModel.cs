@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using GeometryEditor.Core.Editor;
 
-namespace GeometryEditor.ViewModels;
-
-public partial class MainViewModel : ViewModelBase
+namespace GeometryEditor.ViewModels
 {
-    [ObservableProperty]
-    public partial string _greeting { get; set; } = "Hello, world";
+    // Главная ViewModel редакторв
+    public class MainViewModel : EditorViewModel
+    {
+    }
 }

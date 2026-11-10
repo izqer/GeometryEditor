@@ -1,4 +1,4 @@
-﻿<Window x:Class="GeometryEditor.Wpf.MainWindow"
+<Window x:Class="GeometryEditor.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Редактор геометрических фигур"
@@ -132,14 +132,17 @@
                     
                 </Border>
 
+
                 <!-- Контейнер свойств -->
                 <Border Grid.Row="1"
-                        Background="White"
-                        BorderBrush="#D5DBE3"
-                        BorderThickness="1"
-                        CornerRadius="6"
-                        Padding="12"
-                        Margin="0,0,0,12">
+                    Background="White"
+                    BorderBrush="#D5DBE3"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="12"
+                    MinHeight="260"
+                    Margin="0,0,0,12">
+
 
                     <StackPanel>
                         <TextBlock Text="Свойства"
@@ -171,7 +174,7 @@
                             <TextBox Grid.Row="0"
              Grid.Column="1"
              Margin="5,0,0,8"
-             Text="{Binding X, UpdateSourceTrigger=LostFocus}"/>
+             Text="{Binding XText, UpdateSourceTrigger=LostFocus}"/>
 
                             <TextBlock Grid.Row="1"
                Text="Y:"
@@ -179,7 +182,7 @@
                             <TextBox Grid.Row="1"
              Grid.Column="1"
              Margin="5,0,0,8"
-             Text="{Binding Y, UpdateSourceTrigger=LostFocus}"/>
+             Text="{Binding YText, UpdateSourceTrigger=LostFocus}"/>
 
                             <!-- Радиус круга -->
                             <StackPanel Grid.Row="2" Grid.ColumnSpan="2"
@@ -206,7 +209,7 @@
                        VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="1"
                      Margin="5,0,0,0"
-                     Text="{Binding Radius, UpdateSourceTrigger=LostFocus}"/>
+                     Text="{Binding RadiusText, UpdateSourceTrigger=LostFocus}"/>
                                 </Grid>
                             </StackPanel>
 
@@ -235,7 +238,7 @@
                        VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="1"
                      Margin="5,0,0,0"
-                     Text="{Binding Side, UpdateSourceTrigger=LostFocus}"/>
+                     Text="{Binding SideText, UpdateSourceTrigger=LostFocus}"/>
                                 </Grid>
                             </StackPanel>
 
@@ -274,7 +277,7 @@
                                     <TextBox Grid.Row="0"
                      Grid.Column="1"
                      Margin="5,0,0,8"
-                     Text="{Binding Width, UpdateSourceTrigger=LostFocus}"/>
+                     Text="{Binding WidthText, UpdateSourceTrigger=LostFocus}"/>
 
                                     <TextBlock Grid.Row="1"
                        Text="Высота:"
@@ -282,7 +285,7 @@
                                     <TextBox Grid.Row="1"
                      Grid.Column="1"
                      Margin="5,0,0,0"
-                     Text="{Binding Height, UpdateSourceTrigger=LostFocus}"/>
+                     Text="{Binding HeightText, UpdateSourceTrigger=LostFocus}"/>
                                 </Grid>
                             </StackPanel>
 
@@ -338,7 +341,8 @@
                                    Foreground="#253347"
                                    Margin="0,0,0,10"/>
 
-                        <ListBox ItemsSource="{Binding Figures}"
+                        <ListBox Grid.Row="1"
+                                 ItemsSource="{Binding Figures}"
                                  SelectedItem="{Binding SelectedFigure, Mode=TwoWay}"
                                  DisplayMemberPath="DisplayName"
                                  Background="White"
@@ -375,7 +379,8 @@
                     Background="Transparent"
                     MouseLeftButtonDown="WorkCanvas_MouseLeftButtonDown"
                     MouseMove="WorkCanvas_MouseMove"
-                    MouseLeftButtonUp="WorkCanvas_MouseLeftButtonUp">
+                    MouseLeftButtonUp="WorkCanvas_MouseLeftButtonUp"
+                    LostMouseCapture="WorkCanvas_LostMouseCapture">
 
                 <!-- Тестовые фигуры -->
             </Canvas>
